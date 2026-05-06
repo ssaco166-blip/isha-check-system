@@ -2,6 +2,8 @@
 
 此資料夾為可公開上傳版本（後端-only），已移除執行紀錄資料與示範截圖，可用於 GitHub 分享。
 
+完整系統介紹請見：[SYSTEM_INTRODUCTION.md](SYSTEM_INTRODUCTION.md)
+
 ## 1) 最小運行需求
 
 - Python 3.11+（建議 3.12）
@@ -45,3 +47,25 @@
 - `STARTUP_FAILURE`：服務啟動失敗
 - `CONNECTION_FAILURE`：無法連線到登入頁
 - `LOGIN_FAILURE`：帳密登入未成功
+
+## 6) 機敏資料與金鑰規範
+
+- 金鑰/憑證只放在部署主機本地，不放入版本控制。
+- 例如：`software/secrets/google-calendar-service-account.json` 應由部署端自行配置。
+- 若曾誤上傳金鑰，請先輪替（rotate）再公開。
+
+## 7) GitHub 上傳流程
+
+1. `git init`
+2. `git add .`
+3. `git status`（確認沒有 runtime/機敏檔）
+4. `git commit -m "Initial public release"`
+5. `git remote add origin <YOUR_REPO_URL>`
+6. `git branch -M main`
+7. `git push -u origin main`
+
+## 8) 上傳前安全檢查
+
+- 檔案檢查：`rg --files | rg "database\.db|logs/|exports/|secrets/|manual_screens|screenshots"`
+- 關鍵字掃描：`rg -n "(BEGIN PRIVATE KEY|private_key|api[_-]?key|secret|token)"`
+- 最終以 `git status` 確認僅包含可公開內容。
